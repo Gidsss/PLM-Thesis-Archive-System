@@ -1,0 +1,60 @@
+# Python cache and compiled files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment folder
+venv/
+env/
+
+# Django secret keys or sensitive settings
+*.env
+
+# Database and migrations
+db.sqlite3
+*.sqlite3
+*.log
+migrations/
+
+# Ignore media files
+media/
+*.bak
+*.sql
+*.sqlite3
+
+# Static files
+staticfiles/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.orig
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Testing outputs
+.tox/
+.pytest_cache/
+
+# Docker
+*.pid
+.env
+
+# PyInstaller
+*.spec
+
+# Node modules (if using JavaScript in frontend)
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
