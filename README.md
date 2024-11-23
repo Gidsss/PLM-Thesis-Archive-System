@@ -5,7 +5,7 @@ The **PLM Thesis Archive System** is a digital repository for managing, storing,
 
 ## Prerequisites
 - Python 3.12 or later
-- Django 5.x
+- Django 4.2
 - MySQL or MariaDB (10.4+ recommended)
 - pip (Python package manager)
 - A database management tool (e.g., phpMyAdmin)
@@ -68,10 +68,6 @@ DATABASES = {
 }
 ```
 
-#### Resolve Port Conflicts (if any):
-- Ensure no other MySQL/MariaDB instance is running on port 3306.
-- Use `netstat -ano | findstr :3306` to identify conflicting processes and stop them.
-
 ### 5. Apply Migrations
 Prepare the database schema:
 ```bash
@@ -93,17 +89,6 @@ python manage.py runserver
 Access the application at `http://127.0.0.1:8000`.
 
 ## Troubleshooting
-
-### Port 3306 Already in Use
-- Identify the blocking application:
-    ```bash
-    netstat -ano | findstr :3306
-    ```
-- Stop the conflicting process:
-    ```bash
-    taskkill /F /PID <PID>
-    ```
-- Alternatively, update `my.ini` to use a different port for MySQL/MariaDB.
 
 ### `mysqlclient` Errors
 If `mysqlclient` causes issues, use `PyMySQL`:
@@ -136,7 +121,7 @@ plm_archive_system/
 ```
 
 ## Dependencies
-- **Django 5.x**: Core framework.
+- **Django 4.x**: Core framework.
 - **mysqlclient/PyMySQL**: Database adapter for MySQL/MariaDB.
 - **MySQL/MariaDB**: Relational database for storing metadata.
 
