@@ -5,7 +5,7 @@ The **PLM Thesis Archive System** is a digital repository for managing, storing,
 
 ## Prerequisites
 - Python 3.12 or later
-- Django 5.x
+- Django 4.2
 - MySQL or MariaDB (10.4+ recommended)
 - pip (Python package manager)
 - A database management tool (e.g., phpMyAdmin)
@@ -35,6 +35,11 @@ Install the required Python libraries:
 pip install -r requirements.txt
 ```
 
+Install the required npm libraries too:
+```
+npm install
+```
+
 If `requirements.txt` does not exist, manually install the following packages:
 ```bash
 pip install django mysqlclient
@@ -60,17 +65,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'plm_archive',
-        'USER': 'your_mysql_user',
-        'PASSWORD': 'your_password',
+        'USER': 'root',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
 ```
-
-#### Resolve Port Conflicts (if any):
-- Ensure no other MySQL/MariaDB instance is running on port 3306.
-- Use `netstat -ano | findstr :3306` to identify conflicting processes and stop them.
 
 ### 5. Apply Migrations
 Prepare the database schema:
@@ -90,20 +91,15 @@ Start the Django server locally:
 ```bash
 python manage.py runserver
 ```
+
+Run the following command to compile TailwindCSS into an output file (always run):
+```bash
+npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
+```
+
 Access the application at `http://127.0.0.1:8000`.
 
 ## Troubleshooting
-
-### Port 3306 Already in Use
-- Identify the blocking application:
-    ```bash
-    netstat -ano | findstr :3306
-    ```
-- Stop the conflicting process:
-    ```bash
-    taskkill /F /PID <PID>
-    ```
-- Alternatively, update `my.ini` to use a different port for MySQL/MariaDB.
 
 ### `mysqlclient` Errors
 If `mysqlclient` causes issues, use `PyMySQL`:
@@ -130,13 +126,14 @@ plm_archive_system/
 ├── archive_app/         # Core app for managing the archive system
 ├── manage.py            # Django management script
 ├── plm_archive_system/  # Project settings and configurations
+├── static/              # Static assets (images,videos,gifs,etc.)
 ├── templates/           # Frontend templates for the web interface
 ├── venv/                # Virtual environment
 └── requirements.txt     # Project dependencies
 ```
 
 ## Dependencies
-- **Django 5.x**: Core framework.
+- **Django 4.x**: Core framework.
 - **mysqlclient/PyMySQL**: Database adapter for MySQL/MariaDB.
 - **MySQL/MariaDB**: Relational database for storing metadata.
 
