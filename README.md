@@ -35,6 +35,11 @@ Install the required Python libraries:
 pip install -r requirements.txt
 ```
 
+Install the required npm libraries too:
+```
+npm install
+```
+
 If `requirements.txt` does not exist, manually install the following packages:
 ```bash
 pip install django mysqlclient
@@ -86,6 +91,12 @@ Start the Django server locally:
 ```bash
 python manage.py runserver
 ```
+
+Run the following command to compile TailwindCSS into an output file (always run):
+```bash
+npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
+```
+
 Access the application at `http://127.0.0.1:8000`.
 
 ## Troubleshooting
