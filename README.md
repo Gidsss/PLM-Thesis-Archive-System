@@ -65,8 +65,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'plm_archive',
-        'USER': 'your_mysql_user',
-        'PASSWORD': 'your_password',
+        'USER': 'root',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -126,6 +126,7 @@ plm_archive_system/
 ├── archive_app/         # Core app for managing the archive system
 ├── manage.py            # Django management script
 ├── plm_archive_system/  # Project settings and configurations
+├── static/              # Static assets (images,videos,gifs,etc.)
 ├── templates/           # Frontend templates for the web interface
 ├── venv/                # Virtual environment
 └── requirements.txt     # Project dependencies
