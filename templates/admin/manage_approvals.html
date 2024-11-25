@@ -1,0 +1,48 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Manage Document Approvals</h1>
+
+    <table class="w-full table-auto border-collapse bg-white dark:bg-gray-800 rounded-lg shadow">
+        <thead>
+            <tr class="bg-gray-200 dark:bg-gray-700 text-left">
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">#</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Title</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Uploaded By</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Date</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in pending_documents %}
+            <tr class="border-b border-gray-300 dark:border-gray-700">
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ forloop.counter }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.title }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.uploaded_by.email }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.publication_date }}</td>
+                <td class="p-3 text-sm">
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="doc_id" value="{{ document.id }}">
+                        <button type="submit" name="action" value="approve" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            Approve
+                        </button>
+                    </form>
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="doc_id" value="{{ document.id }}">
+                        <button type="submit" name="action" value="reject" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            Reject
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center p-3 text-sm text-gray-500 dark:text-gray-400">No pending documents</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

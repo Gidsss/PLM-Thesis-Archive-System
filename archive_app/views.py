@@ -10,9 +10,11 @@ from .models import Document, AuditTrail
 # Initialize the custom user model
 User = get_user_model()
 
+# Index/Home
 def index_view(request):
     return render(request, 'index.html')
 
+# Authentication Views
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -24,12 +26,11 @@ def login_view(request):
         else:
             messages.error(request, 'Invalid email or password')
     return render(request, 'login.html')
+
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
-
-
 
 def register_view(request):
     if request.method == "POST":
@@ -118,7 +119,7 @@ def manage_approvals(request):
         )
         return JsonResponse({'status': 'success'})  # AJAX response
 
-    return render(request, 'manage_approvals.html', {'pending_documents': pending_documents})
+    return render(request, 'admin/manage_approvals.html', {'pending_documents': pending_documents})
 
 # Activity Logs (Admin Only)
 @permission_required('archive_app.can_view_logs', raise_exception=True)
@@ -127,4 +128,4 @@ def activity_logs(request):
     paginator = Paginator(logs, 20)  # Paginate logs
     page = request.GET.get('page')
     logs = paginator.get_page(page)
-    return render(request, 'activity_logs.html', {'logs': logs})
+    return render(request, 'admin/activity_logs.html', {'logs': logs})

@@ -1,0 +1,25 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Admin Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Pending Documents</h2>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ pending_count }}</p>
+            <a href="{% url 'manage_approvals' %}" class="text-blue-600 dark:text-blue-400 hover:underline">View Details</a>
+        </div>
+
+        <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Activity Logs</h2>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ log_count }}</p>
+            <a href="{% url 'activity_logs' %}" class="text-blue-600 dark:text-blue-400 hover:underline">View Details</a>
+        </div>
+
+        <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-800">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Registered Users</h2>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">{{ user_count }}</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

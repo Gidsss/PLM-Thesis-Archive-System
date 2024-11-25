@@ -1,0 +1,45 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Activity Logs</h1>
+
+    <table class="w-full table-auto border-collapse bg-white dark:bg-gray-800 rounded-lg shadow">
+        <thead>
+            <tr class="bg-gray-200 dark:bg-gray-700 text-left">
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">#</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">User</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Action</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="border-b border-gray-300 dark:border-gray-700">
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ forloop.counter }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ log.user.email }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ log.action }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ log.timestamp }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center p-3 text-sm text-gray-500 dark:text-gray-400">No activity logs</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="mt-4">
+        {% if logs.has_other_pages %}
+        <div class="flex justify-center space-x-2">
+            {% if logs.has_previous %}
+            <a href="?page={{ logs.previous_page_number }}" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Previous</a>
+            {% endif %}
+            {% if logs.has_next %}
+            <a href="?page={{ logs.next_page_number }}" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
