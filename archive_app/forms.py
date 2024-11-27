@@ -19,7 +19,15 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
 
-class DocumentUploadForm(forms.ModelForm):
+class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ['title', 'abstract', 'document_type', 'file_path']
+        fields = ['title', 'department', 'publication_date', 'file_path', 'abstract']
+        widgets = {
+            'abstract': forms.Textarea(attrs={'rows': 4}),
+            'publication_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'max': '9999-12-31'  # Optional: Ensure the date input allows only valid dates
+            }),
+        }
