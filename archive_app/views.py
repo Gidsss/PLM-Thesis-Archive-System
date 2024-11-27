@@ -124,10 +124,6 @@ def submit_document(request):
 def view_document(request, pk):
     document = get_object_or_404(Document, pk=pk)
 
-    # Restrict access to students only
-    if not request.user.is_authenticated:
-        return HttpResponseForbidden("You do not have permission to view this document.")
-
     return render(request, 'view_document.html', {'document': document})
 
 # Document Edit (Admin Only)

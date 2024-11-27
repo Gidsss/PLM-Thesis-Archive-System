@@ -46,7 +46,7 @@
                         <tr>
                             <th scope="col" class="px-4 py-3">Title</th>
                             <th scope="col" class="px-4 py-3">Department</th>
-                            <th scope="col" class="px-4 py-3">Type</th>
+                            <th scope="col" class="px-4 py-3">Publication Date</th>
                             <th scope="col" class="px-4 py-3">Uploaded By</th>
                             <th scope="col" class="px-4 py-3">Keywords</th>
                             <th scope="col" class="px-4 py-3">Status</th>
@@ -59,18 +59,18 @@
                             <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ document.title }}</td>
                             <td class="px-4 py-3">{{ document.department }}</td>
-                            <td class="px-4 py-3">{{ document.document_type }}</td>
+                            <td class="px-4 py-3">{{ document.publication_date }}</td>
                             <td class="px-4 py-3">{{ document.uploaded_by.full_name }}</td>
                             <td class="px-4 py-3">{{ document.keywords }}</td>
                             <td class="px-4 py-3">{{ document.status}}</td>
                             <td class="px-4 py-3 text-center flex items-center justify-center space-x-2">
                                 <!-- View Button: Visible to Students -->
-                                {% if user.is_authenticated and user.role == 'student' or user.role == 'admin' %}
+                               
                                 <a href="{% url 'view_document' document.id %}"
                                     class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     View
                                 </a>
-                                {% endif %}
+                                
 
                                 <!-- Edit Button: Visible to Admin -->
                                 {% if user.is_authenticated and user.role == 'admin' %}
