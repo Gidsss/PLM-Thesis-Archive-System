@@ -4,3 +4,5 @@ mysqlclient==2.2.6
 asgiref==3.8.1
 sqlparse==0.5.2
 tzdata==2024.2
+fpdf==1.7.2
+faker==33.1.0
