@@ -1,0 +1,57 @@
+{% extends "_base.html" %}
+{% block content %}
+<section class="bg-white dark:bg-gray-900 p-3 sm:p-5">
+    <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <h1 class="text-2xl font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl dark:text-white">
+            Edit Document
+        </h1>
+        <form method="POST" enctype="multipart/form-data" class="mt-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-5">
+                <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit"
+                class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                Save Changes
+            </button>
+        </form>
+    </div>
+</section>
+<style>
+    input, select, textarea {
+        background-color: #f9fafb; /* Light background for input fields */
+        color: #374151; /* Dark gray text in light mode */
+        border: 1px solid #d1d5db; /* Light border */
+        border-radius: 0.375rem; /* Rounded corners */
+        padding: 0.625rem; /* Padding inside input fields */
+        width: 100%; /* Full width */
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #3b82f6; /* Focus border color */
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Blue focus ring */
+    }
+
+    /* Dark mode styles */
+    input.dark, select.dark, textarea.dark {
+        background-color: #374151; /* Dark gray background for dark mode */
+        color: #e5e7eb; /* Light gray text for dark mode */
+        border: 1px solid #4b5563; /* Darker border for dark mode */
+    }
+
+    input.dark:focus, select.dark:focus, textarea.dark:focus {
+        border-color: #2563eb; /* Focus border color for dark mode */
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5); /* Focus ring for dark mode */
+    }
+</style>
+{% endblock %}

@@ -15,6 +15,7 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('role', 'admin')  # Explicitly set the role to 'admin'
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError("Superuser must have is_staff=True.")
@@ -48,24 +49,24 @@ class User(AbstractUser):
 # Document Model
 class Document(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
     ]
-    title = models.CharField(max_length=255)
-    abstract = models.TextField()
-    publication_date = models.DateField()
-    document_type = models.CharField(max_length=100)
-    degree_name = models.CharField(max_length=100)
-    subject_categories = models.CharField(max_length=255)
-    college = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    advisor = models.CharField(max_length=100)
-    panel_members = models.TextField()
-    keywords = models.TextField()
-    language = models.CharField(max_length=50)
-    file_path = models.FileField(upload_to='documents/')
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    title = models.CharField(max_length=255)  # Required
+    abstract = models.TextField(blank=True, null=True)  # Optional
+    publication_date = models.DateField(blank=True, null=True)
+    document_type = models.CharField(max_length=100, blank=True, null=True)  # Optional
+    degree_name = models.CharField(max_length=100, blank=True, null=True)  # Optional
+    subject_categories = models.CharField(max_length=255, blank=True, null=True)  # Optional
+    college = models.CharField(max_length=100, blank=True, null=True)  # Optional
+    department = models.CharField(max_length=100)  # Required
+    advisor = models.CharField(max_length=100, blank=True, null=True)  # Optional
+    panel_members = models.TextField(blank=True, null=True)  # Optional
+    keywords = models.TextField(blank=True, null=True)  # Optional
+    language = models.CharField(max_length=50, blank=True, null=True)  # Optional
+    file_path = models.FileField(upload_to='documents/')  # Required
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)  # Required
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')  # Required
 
 # Audit Trail Model
 class AuditTrail(models.Model):

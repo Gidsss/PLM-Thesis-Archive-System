@@ -73,11 +73,12 @@ DATABASES = {
 }
 ```
 
-### 5. Apply Migrations
-Prepare the database schema:
+### 5. Apply Migrations and Seeder
+Prepare the database schema and run seeder:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
+python manage.py seed
 ```
 
 ### 6. Create a Superuser

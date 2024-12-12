@@ -1,0 +1,105 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Manage Document Approvals</h1>
+
+    <table class="w-full table-auto border-collapse bg-white dark:bg-gray-800 rounded-lg shadow">
+        <thead>
+            <tr class="bg-gray-200 dark:bg-gray-700 text-left">
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">#</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Title</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Uploaded By</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Date</th>
+                <th class="p-3 text-sm font-semibold text-gray-800 dark:text-white">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in pending_documents %}
+            <tr class="border-b border-gray-300 dark:border-gray-700">
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ forloop.counter }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.title }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.uploaded_by.email }}</td>
+                <td class="p-3 text-sm text-gray-700 dark:text-gray-300">{{ document.publication_date }}</td>
+                <td class="p-3 text-sm">
+                    <!-- Approve Form -->
+                    <form method="post" class="inline" onsubmit="handleAction(event, 'approve', '{{ document.id }}')">
+                        {% csrf_token %}
+                        <button type="button" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                            onclick="openModal('approve', '{{ document.id }}', '{{ document.title }}')">
+                            Approve
+                        </button>
+                    </form>
+
+                    <!-- Reject Form -->
+                    <form method="post" class="inline" onsubmit="handleAction(event, 'reject', '{{ document.id }}')">
+                        {% csrf_token %}
+                        <button type="button" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                            onclick="openModal('reject', '{{ document.id }}', '{{ document.title }}')">
+                            Reject
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center p-3 text-sm text-gray-500 dark:text-gray-400">No pending documents
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div id="actionModal" tabindex="-1" aria-hidden="true"
+    class="hidden fixed top-0 left-0 right-0 z-50 justify-center items-center w-full p-4 overflow-x-hidden overflow-y-auto h-modal md:h-full">
+    <div class="relative w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+            <div class="p-4 text-center">
+                <h3 id="modalTitle" class="mb-4 text-lg font-semibold text-gray-900 dark:text-white"></h3>
+                <p id="modalMessage" class="mb-4 text-sm text-gray-700 dark:text-gray-300"></p>
+                <form method="post" id="modalForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" id="modalAction" value="">
+                    <input type="hidden" name="doc_id" id="modalDocId" value="">
+                    <button type="submit"
+                        class="py-2 px-3 text-sm font-medium text-center text-gray-700 dark:text-gray-300 rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:focus:ring-primary-900">
+                        Confirm
+                    </button>
+                    <button type="button" onclick="closeModal()"
+                        class="py-2 px-3 text-sm font-medium text-center text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg">
+                        Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(action, docId, title) {
+        // Set modal content
+        const modalTitle = document.getElementById("modalTitle");
+        const modalMessage = document.getElementById("modalMessage");
+        const modalAction = document.getElementById("modalAction");
+        const modalDocId = document.getElementById("modalDocId");
+
+        modalTitle.textContent = `${action === 'approve' ? 'Approve' : 'Reject'} Document`;
+        modalMessage.textContent = `Are you sure you want to ${action} the document titled "${title}"?`;
+        modalAction.value = action;
+        modalDocId.value = docId;
+
+        // Show the modal
+        const modal = document.getElementById("actionModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("actionModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+</script>
+
+{% endblock content %}

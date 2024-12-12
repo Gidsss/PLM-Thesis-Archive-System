@@ -2,7 +2,7 @@
 
 {% load compress %}
 {% load static %}
-
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +15,7 @@
     {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
+    <link rel="icon" href="{% static 'assets/plm-logo.png' %}" type="image/x-icon">
     <script>
         // Set the initial theme based on localStorage or system preference
         if (localStorage.getItem('color-theme') === 'dark' ||
@@ -34,7 +35,6 @@
                 <a href="#" class="flex items-center">
                     <img src="{% static 'assets/plm-logo.png' %}" class="mr-3 h-10 sm:h-16" alt="PLM Logo" />
                     <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-900 dark:text-white">
-
                     </span>
                 </a>
                 <div class="flex items-center lg:order-2">
@@ -52,11 +52,36 @@
                                 fill-rule="evenodd" clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <!-- Log In Button -->
+                    <!-- Log In / Log Out Button -->
+                    {% if not user.is_authenticated %}
                     <a href="{% url 'login' %}"
                         class="text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-blue-700">
                         Log in
                     </a>
+                    {% endif %}
+
+                    <!-- Avatar Button -->
+                    {% if user.is_authenticated %}
+                    <button id="avatarButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-white font-bold">
+                        {{ user.full_name|initials }}
+                    </button>
+                    
+                    <!-- Dropdown menu -->
+                    <div id="userDropdown"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                            <div>{{ user.full_name }}</div>
+                            <div class="font-medium truncate text-gray-600 dark:text-gray-400">{{ user.email }}</div>
+                        </div>
+                        <div class="py-1">
+                            <a href="{% url 'logout' %}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Sign out
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
                     <button data-collapse-toggle="mobile-menu-2" type="button"
                         class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         aria-controls="mobile-menu-2" aria-expanded="false">
@@ -76,25 +101,33 @@
                 </div>
                 <div class="hidden justify-center items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                        <li><a href="{% url 'index' %}"
-                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400">Home</a>
+                        <li>
+                            <a href="{% url 'index' %}"
+                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 {% if request.path == '/' %} text-yellow-600 dark:text-yellow-400 {% endif %}">
+                                Home
+                            </a>
                         </li>
-                        <li><a href="#"
-                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400">Documents</a>
+                        <li>
+                            <a href="{% url 'document_list' %}"
+                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 {% if request.path == '/document/list' %} text-yellow-600 dark:text-yellow-400 {% endif %}">
+                                Documents
+                            </a>
                         </li>
-                        
-                        {% if user.is_authenticated and user.role == 'admin' %}
-                        <li><a href="#"
-                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400">Approvals</a>
-                        </li>
-                        <li><a href="#"
-                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400">Activity
-                                Logs</a></li>
-                        {% endif %}
 
-                        <li><a href="#"
-                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400">Profile</a>
+                        {% if user.is_authenticated and user.role == 'admin' %}
+                        <li>
+                            <a href="{% url 'manage_approvals' %}"
+                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 {% if request.path == '/admin/manage_approvals/' %} text-yellow-600 dark:text-yellow-400 {% endif %}">
+                                Approvals
+                            </a>
                         </li>
+                        <li>
+                            <a href="{% url 'activity_logs' %}"
+                                class="text-gray-700 dark:text-gray-300 hover:text-yellow-600 dark:hover:text-yellow-400 {% if request.path == '/admin/activity_logs/' %} text-yellow-600 dark:text-yellow-400 {% endif %}">
+                                Activity Logs
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
