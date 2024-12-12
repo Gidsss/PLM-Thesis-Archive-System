@@ -12,6 +12,15 @@
             <div class="w-full md:w-1/2">
                 <form method="GET" class="flex items-center">
                     <div class="relative w-full">
+                        <!-- Search Icon -->
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </div>
+                        <!-- Search Input -->
                         <input type="text" id="search" name="q"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             placeholder="Search documents..." value="{{ request.GET.q }}">
@@ -25,7 +34,8 @@
                     <select name="status"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         onchange="this.form.submit()">
-                        <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Select a Status</option>
+                        <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Select a Status
+                        </option>
                         <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending
                         </option>
                         <option value="Approved" {% if request.GET.status == 'Approved' %}selected{% endif %}>Approved
