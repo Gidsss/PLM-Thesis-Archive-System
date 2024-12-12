@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'archive_app',
-    'compressor'
+    'compressor',
 ]
 
 MIDDLEWARE = [

@@ -1,147 +1,95 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block content %}
-
+<!-- Don't use autoformat in here! -->
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <h1 class="text-2xl font-extrabold tracking-tight leading-none text-gray-900 md:text-3xl dark:text-white">
             Thesis Archive
         </h1>
-        <!-- Document List -->
-        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-
-            <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-
-                <div class="w-full md:w-1/2">
-                    <form method="GET" class="flex items-center">
-                        <label for="search" class="sr-only">Search</label>
-                        <div class="relative w-full">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input type="text" id="search" name="q"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Search documents..." value="{{ request.GET.q }}">
-                        </div>
-                    </form>
+        <!-- Search Bar -->
+        <div class="flex items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+            <div class="w-full md:w-1/2">
+                <form method="GET" class="flex items-center">
+                    <div class="relative w-full">
+                        <input type="text" id="search" name="q"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder="Search documents..." value="{{ request.GET.q }}">
+                    </div>
+                </form>
+            </div>
+            <!-- Filter Dropdown -->
+            {% if user.is_authenticated %}
+            <div>
+                <form method="GET">
+                    <select name="status"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                        onchange="this.form.submit()">
+                        <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Select a Status</option>
+                        <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending
+                        </option>
+                        <option value="Approved" {% if request.GET.status == 'Approved' %}selected{% endif %}>Approved
+                        </option>
+                        <option value="Rejected" {% if request.GET.status == 'Rejected' %}selected{% endif %}>Rejected
+                        </option>
+                        <option value="" {% if not request.GET.status %}selected{% endif %}>All Status</option>
+                    </select>
+                </form>
+            </div>
+            {% endif %}
+            {% if user.is_authenticated and user.role == 'student' %}
+            <button data-modal-target="submit-document-modal" data-modal-toggle="submit-document-modal"
+                class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
+                type="button">
+                Upload Thesis
+            </button>
+            {% endif %}
+        </div>
+        <!-- Thesis Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for document in documents %}
+            {% if user.is_authenticated or document.status == "Approved" %}
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md overflow-hidden">
+                <div class="p-4">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+                        {{ document.title }}
+                    </h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Department:</span> {{ document.department }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Publication Date:</span> {{ document.publication_date }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Uploaded By:</span> {{ document.uploaded_by.full_name }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Keywords:</span> {{ document.keywords }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold">Status:</span> {{ document.status }}
+                    </p>
+                    <div class="mt-4 flex justify-between">
+                        <a href="{% url 'view_document' document.id %}"
+                            class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2">
+                            View
+                        </a>
+                        {% if user.is_authenticated and user.role == 'admin' %}
+                        <a href="{% url 'edit_document' document.id %}"
+                            class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
+                            Edit
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
-                <!-- Conditional Upload Button for Students -->
-                {% if user.is_authenticated and user.role == 'student' %}
-                <!-- Modal toggle button -->
-                <button data-modal-target="submit-document-modal" data-modal-toggle="submit-document-modal"
-                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
-                    type="button">
-                    Upload Thesis
-                </button>
-                {% endif %}
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-4 py-3">Title</th>
-                            <th scope="col" class="px-4 py-3">Department</th>
-                            <th scope="col" class="px-4 py-3">Publication Date</th>
-                            <th scope="col" class="px-4 py-3">Uploaded By</th>
-                            <th scope="col" class="px-4 py-3">Keywords</th>
-                            <th scope="col" class="px-4 py-3">Status</th>
-                            <th scope="col" class="px-4 py-3 text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for document in documents %}
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ document.title }}</td>
-                            <td class="px-4 py-3">{{ document.department }}</td>
-                            <td class="px-4 py-3">{{ document.publication_date }}</td>
-                            <td class="px-4 py-3">{{ document.uploaded_by.full_name }}</td>
-                            <td class="px-4 py-3">{{ document.keywords }}</td>
-                            <td class="px-4 py-3">{{ document.status}}</td>
-                            <td class="px-4 py-3 text-center flex items-center justify-center space-x-2">
-                                <!-- View Button: Visible to Students -->
-                               
-                                <a href="{% url 'view_document' document.id %}"
-                                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    View
-                                </a>
-                                
-
-                                <!-- Edit Button: Visible to Admin -->
-                                {% if user.is_authenticated and user.role == 'admin' %}
-                                <a href="{% url 'edit_document' document.id %}"
-                                    class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                    Edit
-                                </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
-                                No documents found.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-                aria-label="Table navigation">
-                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing <span class="font-semibold text-gray-900 dark:text-white">{{ documents.start_index }}</span>
-                    to <span class="font-semibold text-gray-900 dark:text-white">{{ documents.end_index }}</span> of
-                    <span class="font-semibold text-gray-900 dark:text-white">{{ documents.paginator.count }}</span>
-                </span>
-                <ul class="inline-flex items-stretch -space-x-px">
-                    {% if documents.has_previous %}
-                    <li>
-                        <a href="?page={{ documents.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}"
-                            class="flex items-center justify-center h-full py-1.5 px-3 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            <span class="sr-only">Previous</span>
-                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293-3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% for page_num in documents.paginator.page_range %}
-                    <li>
-                        <a href="?page={{ page_num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}"
-                            class="flex items-center justify-center text-sm py-2 px-3 leading-tight 
-                           {% if documents.number == page_num %}
-                               text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white
-                           {% else %}
-                               text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white
-                           {% endif %}">
-                            {{ page_num }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                    {% if documents.has_next %}
-                    <li>
-                        <a href="?page={{ documents.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}"
-                            class="flex items-center justify-center h-full py-1.5 px-3 text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            <span class="sr-only">Next</span>
-                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4-4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
+            {% endif %}
+            {% empty %}
+            <p class="text-center text-gray-500 dark:text-gray-400">
+                No documents found.
+            </p>
+            {% endfor %}
         </div>
     </div>
 </section>

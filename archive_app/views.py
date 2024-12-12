@@ -76,10 +76,10 @@ def profile_view(request):
 # Document List & Search (All Roles)
 def document_list(request):
     query = request.GET.get('q')  # For search functionality
-    # department_filter = request.GET.get('department')  # For department filtering
-    # documents = Document.objects.filter(status="Approved")  # Display only approved documents
+    status_filter = request.GET.get('status')  # For status filtering (Pending, Approved)
 
-    # Display all documents
+
+     # Display all documents
     documents = Document.objects.all()
 
     # Apply search query filter
@@ -88,22 +88,23 @@ def document_list(request):
             title__icontains=query
         )  # Add additional filters like keywords, abstract, etc., if needed.
 
-    # Apply department filter
-    # if department_filter:
-    #     documents = documents.filter(department=department_filter)
+    # Apply status filter
+    if status_filter:
+        documents = documents.filter(status=status_filter)
 
     # Paginate documents
     paginator = Paginator(documents, 10)  # Show 10 documents per page
     page = request.GET.get('page')
     documents = paginator.get_page(page)
 
-    # Get unique departments for dropdown
+    # Get unique departments for dropdown (if needed for other filters)
     departments = Document.objects.values_list('department', flat=True).distinct()
 
     return render(request, 'document_list.html', {
         'documents': documents,
         'departments': departments,
-        # 'selected_department': department_filter,
+        'selected_status': status_filter,  # Pass the selected status to the template
+        'query': query,  # Pass the search query to the template
     })
 
 # Document Upload (Students)
