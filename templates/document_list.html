@@ -24,13 +24,12 @@
                     <select name="status"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         onchange="this.form.submit()">
-                        {% if user.role == 'student' %}
                         <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Select a Status</option>
                         <option value="Approved" {% if request.GET.status == 'Approved' %}selected{% endif %}>Approved</option>
+                        {% if user.role == 'student' %}
                         <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending</option>
                         {% elif user.role == 'admin' %}
                         <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending</option>
-                        <option value="Approved" {% if request.GET.status == 'Approved' %}selected{% endif %}>Approved</option>
                         <option value="Rejected" {% if request.GET.status == 'Rejected' %}selected{% endif %}>Rejected</option>
                         {% endif %}
                     </select>
@@ -71,7 +70,7 @@
                     </p>
                     <div class="mt-4 flex justify-between">
                         <a href="{% url 'view_document' document.id %}"
-                            class="text-black bg-gray-300 hover:bg-gray-100 font-medium rounded-lg text-sm px-4 py-2">
+                            class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2">
                             View
                         </a>
                         {% if user.is_authenticated and user.role == 'admin' %}
