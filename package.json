@@ -1,9 +1,21 @@
 {
   "devDependencies": {
-    "tailwindcss": "^3.4.15"
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.9",
     "flowbite": "^2.5.2"
-  }
+  },
+  "name": "plm-thesis-archive-system",
+  "description": "The **PLM Thesis Archive System** is a digital repository for managing, storing, and retrieving academic theses and research papers. This project is built with the Django framework and uses a MySQL/MariaDB database.",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
