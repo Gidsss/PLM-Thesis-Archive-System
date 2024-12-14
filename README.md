@@ -49,7 +49,7 @@ pip install django mysqlclient
 #### Set up MySQL/MariaDB:
 - **Create a database**:
     ```sql
-    CREATE DATABASE plm_archive CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    CREATE DATABASE plm_archive CHARACTER SET utf8mb4 COLLATE utf8_general_ci;
     ```
 - **Create a user and grant privileges**:
     ```sql
