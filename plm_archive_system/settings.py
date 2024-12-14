@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-o!f58u4kwzkr3^rla*7!f$b0-ojnq#0a75@lgw*ogda&!b&upl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['plm_archive_system.onrender.com']
 
 AUTH_USER_MODEL = 'archive_app.User'
 
