@@ -14,6 +14,15 @@ User = get_user_model()
 
 # Index/Home
 def index_view(request):
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Redirect based on user role
+        if request.user.role == 'student':
+            return redirect('document_list')  # Redirect to student dashboard
+        elif request.user.role == 'admin':
+            return redirect('activity_logs')  # Redirect to admin dashboard
+
+    # If the user is not authenticated, allow access to the Home page
     return render(request, 'index.html')
 
 # Authentication Views
