@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-o!f58u4kwzkr3^rla*7!f$b0-ojnq#0a75@lgw*ogda&!b&upl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['plm-archive-system.onrender.com']
+ALLOWED_HOSTS = ['plm-archive-system.onrender.com', '127.0.0.1']
 
 AUTH_USER_MODEL = 'archive_app.User'
 
@@ -127,8 +127,10 @@ USE_TZ = True
 
 # Static files settings for production
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Where collected static files are stored
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # Points to your 'static' folder
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # Where collectstatic outputs files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
