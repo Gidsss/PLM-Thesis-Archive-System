@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'plm_archive_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Backend for MySQL
-        'NAME': 'plm_archive',                # Database name
+        'NAME': 'archive',                # Database name
         'USER': 'root',                       # MySQL username (use root if you have no other user)
         'PASSWORD': '',                       # MySQL password (leave empty if you have no password)
         'HOST': 'localhost',                  # Server address (use 127.0.0.1/localhost or your IP if hosted remotely)
