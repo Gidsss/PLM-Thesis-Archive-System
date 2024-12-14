@@ -12,11 +12,17 @@
                 <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     {{ field.label }}
                 </label>
-                {{ field }}
+            
+                <div class="block text-base font-bold text-gray-900 dark:text-gray-300">
+                    {{ field }}
+                </div>
+            
                 {% if field.errors %}
                 <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
                 {% endif %}
             </div>
+            
+            
             {% endfor %}
             <button type="submit"
                 class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -35,7 +41,14 @@
         width: 100%; /* Full width */
         transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
-
+    input[type="file"] {
+        color: #374151; /* Default text color in light mode */
+    }
+    
+    .dark input[type="file"] {
+        color: #e5e7eb; /* Light gray text for dark mode */
+        background-color: #374151; /* Optional: adjust the background to match dark mode */
+    }
     input:focus, select:focus, textarea:focus {
         outline: none;
         border-color: #3b82f6; /* Focus border color */

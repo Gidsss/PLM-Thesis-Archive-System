@@ -86,9 +86,9 @@ def profile_view(request):
 # Document List & Search (All Roles)
 def document_list(request):
     query = request.GET.get('q')  # For search functionality
-    status_filter = request.GET.get('status')  # For status filtering (Pending, Approved, etc.)
+    status_filter = request.GET.get('status')  # For status filtering (Pending, Approved, etc.) PENDING IS FIRST SHOWED
     
-    # Apply filtering logic based on the user's role
+    # Check user role and filter documents accordingly
     if request.user.is_authenticated:
         if request.user.role == 'student':
             # Students: see Approved documents + their own Pending documents
@@ -96,8 +96,9 @@ def document_list(request):
                 Q(status="Approved") | Q(status="Pending", uploaded_by=request.user)
             )
         elif request.user.role == 'admin':
-            # Admins: see all documents
-            documents = Document.objects.all()
+            # Admins: see all documents, with a default status filter of 'Pending'
+            status_filter = status_filter or 'Pending'  # Default to 'Pending' if no filter is provided
+            documents = Document.objects.filter(status=status_filter)
         else:
             # Any other authenticated user type
             documents = Document.objects.filter(status="Approved")
