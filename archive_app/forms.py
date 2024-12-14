@@ -22,7 +22,7 @@ class UserRegistrationForm(forms.ModelForm):
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ['title', 'department', 'publication_date', 'abstract']
+        fields = ['title', 'department', 'publication_date', 'abstract', 'file_path']
         widgets = {
             'abstract': forms.Textarea(attrs={'rows': 4}),
             'publication_date': forms.DateInput(attrs={
