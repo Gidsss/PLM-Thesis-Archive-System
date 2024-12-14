@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse, HttpResponseForbidden
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
 from .forms import UserRegistrationForm, DocumentForm
@@ -85,19 +86,32 @@ def profile_view(request):
 # Document List & Search (All Roles)
 def document_list(request):
     query = request.GET.get('q')  # For search functionality
-    status_filter = request.GET.get('status')  # For status filtering (Pending, Approved)
-
-
-     # Display all documents
-    documents = Document.objects.all()
+    status_filter = request.GET.get('status')  # For status filtering (Pending, Approved, etc.)
+    
+    # Apply filtering logic based on the user's role
+    if request.user.is_authenticated:
+        if request.user.role == 'student':
+            # Students: see Approved documents + their own Pending documents
+            documents = Document.objects.filter(
+                Q(status="Approved") | Q(status="Pending", uploaded_by=request.user)
+            )
+        elif request.user.role == 'admin':
+            # Admins: see all documents
+            documents = Document.objects.all()
+        else:
+            # Any other authenticated user type
+            documents = Document.objects.filter(status="Approved")
+    else:
+        # Unauthenticated users only see Approved documents
+        documents = Document.objects.filter(status="Approved")
 
     # Apply search query filter
     if query:
         documents = documents.filter(
-            title__icontains=query
-        )  # Add additional filters like keywords, abstract, etc., if needed.
+            Q(title__icontains=query) | Q(keywords__icontains=query) | Q(abstract__icontains=query)
+        )
 
-    # Apply status filter
+    # Apply status filter if present
     if status_filter:
         documents = documents.filter(status=status_filter)
 
@@ -106,14 +120,10 @@ def document_list(request):
     page = request.GET.get('page')
     documents = paginator.get_page(page)
 
-    # Get unique departments for dropdown (if needed for other filters)
-    departments = Document.objects.values_list('department', flat=True).distinct()
-
     return render(request, 'document_list.html', {
         'documents': documents,
-        'departments': departments,
-        'selected_status': status_filter,  # Pass the selected status to the template
-        'query': query,  # Pass the search query to the template
+        'query': query,
+        'selected_status': status_filter,
     })
 
 # Document Upload (Students)
