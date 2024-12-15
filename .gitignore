@@ -19,7 +19,6 @@ media/
 *.sql
 
 # Static files
-staticfiles/
 
 # IDE and editor files
 .vscode/
