@@ -11,15 +11,12 @@ env/
 *.env
 
 # Database and migrations
-db.sqlite3
-*.sqlite3
 *.log
 
 # Ignore media files
 media/
 *.bak
 *.sql
-*.sqlite3
 
 # Static files
 staticfiles/

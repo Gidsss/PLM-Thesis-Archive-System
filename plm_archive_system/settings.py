@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-o!f58u4kwzkr3^rla*7!f$b0-ojnq#0a75@lgw*ogda&!b&upl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['plm-archive-system.onrender.com', '127.0.0.1', 'localhost']
+
 
 AUTH_USER_MODEL = 'archive_app.User'
 
@@ -42,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'archive_app',
     'compressor',
-    'tailwind',
 ]
 
 MIDDLEWARE = [
@@ -79,14 +80,21 @@ WSGI_APPLICATION = 'plm_archive_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',  # Backend for MySQL
+#         'NAME': 'plm_archive',                # Database name
+#         'USER': 'root',                       # MySQL username (use root if you have no other user)
+#         'PASSWORD': '',                       # MySQL password (leave empty if you have no password)
+#         'HOST': 'localhost',                  # Server address (use 127.0.0.1/localhost or your IP if hosted remotely)
+#         'PORT': '3306',                       # Default MySQL port
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Backend for MySQL
-        'NAME': 'plm_archive',                # Database name
-        'USER': 'root',                       # MySQL username (use root if you have no other user)
-        'PASSWORD': '',                       # MySQL password (leave empty if you have no password)
-        'HOST': 'localhost',                  # Server address (use 127.0.0.1/localhost or your IP if hosted remotely)
-        'PORT': '3306',                       # Default MySQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
